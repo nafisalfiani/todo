@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const encryption = require('../helpers/encryption');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -19,9 +20,19 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING
-  }, {
+  },
+  {
     sequelize,
     modelName: 'User',
   });
+
+  // Method 3 via the direct method
+  User.beforeCreate(async (user, options) => {
+    console.log(user, '>>>user');
+    console.log(user.password, '>>>user');
+    const encryptedPassword = await encryption.encrypt(user.password);
+    user.password = encryptedPassword;
+  });
+
   return User;
 };
