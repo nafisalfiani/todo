@@ -7,5 +7,9 @@ router.get('/', (req, res) => {
 
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
+router.put('/update/:id', UserController.update);
+router.patch('/edit/:id', UserController.edit);
+router.delete('/delete/:id', UserController.delete);
+router.get('/list', UserController.get);
 
 module.exports = router;
