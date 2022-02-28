@@ -1,6 +1,7 @@
 const { User } = require('../models/index');
-const { Op, json } = require('sequelize');
+const { Op } = require('sequelize');
 const { decrypt } = require('../helpers/encryption');
+const generateToken = require('../helpers/jwt');
 
 class UserController {
     static async register(req, res) {
@@ -22,28 +23,34 @@ class UserController {
     }
     
     static async login(req, res) {
-        const username = req.body.username;
-        const email = req.body.email;
-
+        const { email, username, password } = req.body;
+        
         try {
             const user = await User.findOne({
                 where: {
                     [Op.or]: [
-                        { 
-                            username: {
-                                [Op.like]: '%lv%'
-                            }
-                        },
+                        { username },
+                        { email }
                     ]
                 }
             });
 
             if (!user) {
                 res.status(401).json({ msg: `Invalid Account`});
+            }
+
+            const decryptPassword = decrypt(user.password);
+            if (decryptPassword === req.body.password) {
+                const payload = {
+                    id: req.body.id,
+                    username: req.body.username,
+                    email: req.body.email  
+                };
+                
+                const access_token = generateToken(payload);
+                res.status(200).json({ access_token });
             } else {
-                if (decrypt(user.password) === req.body.password) {
-                res.status(200).json({ user });
-                }
+                res.status(401).json({ msg: `Invalid Account`});
             }
 
         } catch (error) {

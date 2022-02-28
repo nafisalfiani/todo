@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           msg: "Please enter your password"
+        },
+        len: {
+          args: [8],
+          msg: "Please enter your password at least 6 chars"
         }
       }
     },

@@ -13,3 +13,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_TCP_PORT: 3306
+  redis:
+    image: redis:latest
+    restart: on-failure
+    entrypoint:
+      - "redis-server"
+      - "/usr/lib/redis/conf/redis.conf"
+    volumes:
+      - "./storage/redis/conf:/usr/lib/redis/conf"
+      - "./storage/redis/modules:/usr/lib/redis/modules"
+      - "./storage/redis/data:/data"
+    ports:
+      - "6379:6379"
