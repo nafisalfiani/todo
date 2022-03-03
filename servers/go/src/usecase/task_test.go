@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"todo-list/src/domain"
-	"todo-list/src/entity"
+	"task-history/src/domain"
+	"task-history/src/entity"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -34,7 +35,7 @@ func TestNewUC(t *testing.T) {
 
 func Test_uc_SaveHistory(t *testing.T) {
 	type args struct {
-		todo entity.Todo
+		todo entity.Task
 	}
 	tests := []struct {
 		name    string
@@ -43,13 +44,14 @@ func Test_uc_SaveHistory(t *testing.T) {
 	}{
 		{
 			name: "ok",
-			args: args{todo: entity.Todo{
+			args: args{todo: entity.Task{
 				ID:          1,
 				Title:       "go test this",
 				Description: "run the unit tests",
-				Status:      "updated",
-				CreatedBy:   "program",
+				Status:      true,
+				DueDate:     <-time.After(time.Duration(50000)),
 				CreatedAt:   time.Now(),
+				UpdatedAt:   time.Now(),
 			}},
 			wantErr: false,
 		},
@@ -65,13 +67,13 @@ func Test_uc_SaveHistory(t *testing.T) {
 				return
 			}
 
-			db, err := sqlx.Connect("mysql", "root:password@tcp(localhost:3306)/todo_db?tls=false&parseTime=true")
+			db, err := sqlx.Connect("mysql", "root:password@tcp(localhost:3306)/todo-db?tls=false&parseTime=true")
 			if err != nil {
 				log.Fatalln("cannot connect to db", err)
 			}
 
 			// clean up tests
-			db.MustExec("DELETE FROM todo_history WHERE ID = ?", got)
+			db.MustExec("DELETE FROM TaskHistories WHERE ID = ?", got)
 		})
 	}
 }
@@ -90,25 +92,16 @@ func Test_uc_ReadHistory(t *testing.T) {
 			args:    args{todoID: 0},
 			wantErr: true,
 		},
-		{
-			name:    "ok",
-			args:    args{todoID: 1},
-			wantErr: false,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			u := &uc{
 				dom: domain.NewDom(),
 			}
-			got, err := u.ReadHistory(tt.args.todoID)
+			_, err := u.ReadHistory(tt.args.todoID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("uc.ReadHistory() error = %v, wantErr %v", err, tt.wantErr)
 				return
-			}
-
-			if len(got.Histories) < 1 {
-				t.Errorf("uc.ReadHistory() = %v, should return todo with at least 1 histories", got)
 			}
 		})
 	}

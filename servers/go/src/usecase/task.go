@@ -2,14 +2,15 @@ package usecase
 
 import (
 	"errors"
+	"time"
 
-	"todo-list/src/domain"
-	"todo-list/src/entity"
+	"task-history/src/domain"
+	"task-history/src/entity"
 )
 
 type Interface interface {
-	SaveHistory(todo entity.Todo) (int, error)
-	ReadHistory(todoID int) (entity.Todo, error)
+	SaveHistory(todo entity.Task) (int, error)
+	ReadHistory(todoID int) (entity.Task, error)
 }
 
 type uc struct {
@@ -22,11 +23,13 @@ func NewUC(dom domain.Interface) Interface {
 	}
 }
 
-func (u *uc) SaveHistory(todo entity.Todo) (int, error) {
+func (u *uc) SaveHistory(todo entity.Task) (int, error) {
+	todo.CreatedAt = time.Now()
+	todo.UpdatedAt = time.Now()
 	return u.dom.SaveHistory(todo)
 }
 
-func (u *uc) ReadHistory(todoID int) (entity.Todo, error) {
+func (u *uc) ReadHistory(todoID int) (entity.Task, error) {
 	todo, err := u.dom.ReadHistory(todoID)
 	if err != nil {
 		return todo, err

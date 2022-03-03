@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"todo-list/src/entity"
-	"todo-list/src/usecase"
+	"task-history/src/entity"
+	"task-history/src/usecase"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,8 +46,8 @@ func Init(uc usecase.Interface) REST {
 
 func (r *rest) registerRoutes(httpServer *gin.Engine) {
 	httpServer.GET("/hello", r.Hello)
-	httpServer.GET("/todo/:todo_id/history", r.ReadHistory)
-	httpServer.POST("/todo/:todo_id/history", r.SaveHistory)
+	httpServer.GET("/todo/:task_id/history", r.ReadHistory)
+	httpServer.POST("/todo/:task_id/history", r.SaveHistory)
 }
 
 func (r *rest) Run() {
@@ -61,7 +62,7 @@ func (r *rest) Hello(ctx *gin.Context) {
 }
 
 func (r *rest) ReadHistory(ctx *gin.Context) {
-	todoIdStr := ctx.Param("todo_id")
+	todoIdStr := ctx.Param("task_id")
 	todoID, err := strconv.Atoi(todoIdStr)
 	if err != nil {
 		httpRespError(ctx, fmt.Sprintf("no todo with ID %v found", todoID), http.StatusNotFound, err)
@@ -78,14 +79,23 @@ func (r *rest) ReadHistory(ctx *gin.Context) {
 }
 
 func (r *rest) SaveHistory(ctx *gin.Context) {
-	todo := entity.Todo{}
+	todoIdStr := ctx.Param("task_id")
+	todoID, err := strconv.Atoi(todoIdStr)
+	if err != nil {
+		httpRespError(ctx, fmt.Sprintf("no todo with ID %v found", todoID), http.StatusNotFound, err)
+		return
+	}
+
+	todo := entity.Task{
+		ID: todoID,
+	}
 
 	if err := ctx.BindJSON(&todo); err != nil {
 		httpRespError(ctx, "cannot read payload", http.StatusBadRequest, err)
 		return
 	}
 
-	_, err := r.uc.SaveHistory(todo)
+	_, err = r.uc.SaveHistory(todo)
 	if err != nil {
 		httpRespError(ctx, "cannot save todo history", http.StatusInternalServerError, err)
 		return

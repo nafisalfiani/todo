@@ -1,7 +1,7 @@
-const { User } = require('../models/index');
+const { User } = require('../../models/index');
 const { Op } = require('sequelize');
-const { decrypt } = require('../helpers/encryption');
-const generateToken = require('../helpers/jwt');
+const { decrypt } = require('../../helpers/encryption');
+const generateToken = require('../../helpers/jwt');
 
 class UserController {
     static async register(req, res) {
@@ -61,8 +61,6 @@ class UserController {
     }
 
     static async update(req,res) {
-        // const user = await User.findAll();
-
         const payload = {
             username: req.body.username,
             email: req.body.email,

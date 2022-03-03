@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { UserController } = require('../controllers/index');
+const { UserController } = require('../../controllers/index');
 
 router.get('/', (req, res) => {
     res.send('Hello from user?')

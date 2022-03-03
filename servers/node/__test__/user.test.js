@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../app');
-const { User } = require('../models/index');
+// const { User } = require('../models/index');
+const { User,sequelize } = require("../models")
+const { queryInterface } = sequelize
 
 afterAll(async () => {
     await User.destroy({

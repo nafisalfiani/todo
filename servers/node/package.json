@@ -11,7 +11,7 @@
     "db:migrate:development": "NODE_ENV=development npm run db:migrate",
     "db:migrate:test": "NODE_ENV=test npm run db:migrate",
     "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit",
-    "development": "NODE_ENV=development nodemon app.js",
+    "development": "NODE_ENV=development nodemon /bin/http.js",
     "start": "node app.js"
   },
   "keywords": [],
