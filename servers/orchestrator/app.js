@@ -7,11 +7,6 @@ const port = 3001;
 const app = express();
 
 app.use(express.json());
-// app.use(router);
-
-app.get('/' , (req , res)=>{
-   res.send('hello from simple server :)')
-})
 
 app.get('/listOfUser' , async (req , res)=>{
     try {
@@ -39,7 +34,7 @@ app.get('/listOfUser' , async (req , res)=>{
         let id = req.params.id
 
         const todo = await axios({
-            method: 'post',
+            method: 'put',
             url: `http://localhost:3000/task/update/${id}`,
             data: req.body,
         })

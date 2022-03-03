@@ -1,4 +1,4 @@
-module todo-list
+module task-history
 
 go 1.17
 

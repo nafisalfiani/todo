@@ -1,7 +1,7 @@
 # db docker volumes
 env/storage/
 
-orchestrator/node_modules
+servers/orchestrator/node_modules/
 
-servers/node/node_modules
-servers/node/coverage
+servers/node/node_modules/
+servers/node/coverage/

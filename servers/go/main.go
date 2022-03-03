@@ -1,9 +1,9 @@
 package main
 
 import (
-	"todo-list/src/domain"
-	"todo-list/src/rest"
-	"todo-list/src/usecase"
+	"task-history/src/domain"
+	"task-history/src/rest"
+	"task-history/src/usecase"
 )
 
 func main() {
