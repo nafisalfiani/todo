@@ -14,7 +14,6 @@ app.get('/' , (req , res)=>{
 })
 
 app.get('/listOfUser' , async (req , res)=>{
-    // res.send('hello from simple server :)')
     try {
         const listOfUser = await axios.get('http://localhost:3000/user/list');
         const data = listOfUser.data;
@@ -24,8 +23,41 @@ app.get('/listOfUser' , async (req , res)=>{
     }
  })
 
+ app.get('/todo/:id/history' , async (req , res)=>{
+    try {
+        let id = req.params.id
+        const todo = await axios.get(`http://localhost:8090/todo/${id}/history`);
+        const data = todo.data;
+        res.status(200).json(data)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+ })
+
+ app.post('/task/update/:id' , async (req , res)=>{
+    try {
+        let id = req.params.id
+
+        const todo = await axios({
+            method: 'post',
+            url: `http://localhost:3000/task/update/${id}`,
+            data: req.body,
+        })
+
+        const todo_history = await axios({
+            method: 'post',
+            url: `http://localhost:8090/todo/${id}/history`,
+            data: req.body,
+          });
+          
+        const data = todo_history.data;
+        res.status(200).json(data)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+ })
+
 app.get('/list' , async (req , res)=>{
-    // res.send('hello from simple server :)')
     try {
         const cache = await redis.get('user/list');
         if (cache) {
@@ -42,7 +74,9 @@ app.get('/list' , async (req , res)=>{
     }
  })
 
-
+app.post('/' , (req , res)=>{
+   res.send('hello from simple server :)')
+})
 
 
 app.listen(port, () => {
