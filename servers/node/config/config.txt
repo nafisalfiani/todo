@@ -1,0 +1,35 @@
+{
+  "development": {
+    "username": "root",
+    "password": "password",
+    "database": "todo-db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306,
+    "application_port": 3000,
+    "static_variable": "static",
+    "encryption_key": "my passphrase"
+  },
+  "test": {
+    "username": "root",
+    "password": "password",
+    "database": "todo-db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306,
+    "application_port": 3000,
+    "static_variable": "static",
+    "encryption_key": "my passphrase"
+  },
+  "production": {
+    "username": "root",
+    "password": "password",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306,
+    "application_port": 3000,
+    "static_variable": "static",
+    "encryption_key": "my passphrase"
+  }
+}
