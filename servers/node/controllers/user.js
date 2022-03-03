@@ -61,7 +61,7 @@ class UserController {
     }
 
     static async update(req,res) {
-        const user = await User.findAll();
+        // const user = await User.findAll();
 
         const payload = {
             username: req.body.username,
@@ -96,16 +96,14 @@ class UserController {
     }
 
     static async edit(req, res) {
-        let payload = {
-            username : req.body.username
-        };
+        const username = { username: req.body.username }
         const id = { id: req.params.id }
 
         try {
-            const user = User.update(payload, {
+            const user = User.update(username, {
                 where : id
             });
-            res.status(200).json(user);
+            res.status(200).json(username);
         } catch (error) {
             console.log(error);
             res.status(500).json({message: `Internal Server Error`});
