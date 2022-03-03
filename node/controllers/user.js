@@ -48,6 +48,7 @@ class UserController {
                 };
                 
                 const access_token = generateToken(payload);
+                console.log(access_token);
                 res.status(200).json({ access_token });
             } else {
                 res.status(401).json({ msg: `Invalid Account`});
@@ -65,7 +66,6 @@ class UserController {
         const payload = {
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
             firstname: req.body.firstname,
             lastname: req.body.lastname
         };
@@ -97,8 +97,7 @@ class UserController {
 
     static async edit(req, res) {
         let payload = {
-            username : req.body.username,
-            password : req.body.password
+            username : req.body.username
         };
         const id = { id: req.params.id }
 
