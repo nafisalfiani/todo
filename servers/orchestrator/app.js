@@ -8,11 +8,30 @@ const app = express();
 
 app.use(express.json());
 
+// app.get('/listOfUser' , async (req , res)=>{
+//     try {
+//         const listOfUser = await axios.get('http://localhost:3000/user/list');
+//         const data = listOfUser.data;
+//         res.status(200).json(data)
+//     } catch (err) {
+//         res.status(500).json(err)
+//     }
+//  })
+
+// Caching get all user.
+
 app.get('/listOfUser' , async (req , res)=>{
     try {
-        const listOfUser = await axios.get('http://localhost:3000/user/list');
-        const data = listOfUser.data;
-        res.status(200).json(data)
+        const cache = await redis.get('/user/list')
+        if (cache) {
+            res.status(200).json(JSON.parse(cache));
+            
+        } else {
+            const listOfUser = await axios.get('http://localhost:3000/user/list');
+            const data = listOfUser.data;
+            await redis.set('/listOfUser', JSON.stringify(data))
+            res.status(200).json(data)
+        }
     } catch (err) {
         res.status(500).json(err)
     }
