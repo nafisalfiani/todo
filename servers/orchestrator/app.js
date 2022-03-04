@@ -40,6 +40,15 @@ app.get('/listOfUser' , async (req , res)=>{
 
  app.post('/task/create' , async (req , res)=>{
     try {
+        const rate = await redis.get('create:rate')
+        if (rate == 2) {
+            await redis.set('create:rate', 0);
+            res.status(429).json({message:"too many request"})
+            return
+        }
+
+        await redis.incr('create:rate');
+        
         const todo = await axios({
             method: 'post',
             url: `http://localhost:3000/task/create`,
