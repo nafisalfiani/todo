@@ -57,7 +57,7 @@ app.get('/listOfUser' , async (req , res)=>{
 
         const todo_history = await axios({
             method: 'post',
-            url: `http://localhost:8090/todo/${id}/history`,
+            url: `http://localhost:8090/todo/${todo.data.id}/history`,
             data: req.body,
           });
         
